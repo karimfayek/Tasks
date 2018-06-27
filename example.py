@@ -1,9 +1,6 @@
 from PyQt5 import QtWidgets
 # from mainwindow import Ui_MainWindow
-        self.username = ''
-        uic.loadUi('login.ui', self)
-        self.buttonLogin.clicked.connect(self.handleLogin)
-        '''''
+'''''
         self.textName = QLineEdit(self)
         self.textPass = QLineEdit(self)
         self.buttonLogin = QPushButton('Login', self)
@@ -12,7 +9,8 @@ from PyQt5 import QtWidgets
         layout.addWidget(self.textName)
         layout.addWidget(self.textPass)
         layout.addWidget(self.buttonLogin)
-'''''
+        '''''
+
 class Login(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Login, self).__init__(parent)

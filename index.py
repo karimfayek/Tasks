@@ -17,13 +17,17 @@ class Login(QDialog):
     def __init__(self, parent=None):
         super(Login, self).__init__(parent)
         self.username = ''
+        username = ''
         uic.loadUi('login.ui', self)
         self.textPass.setEchoMode(QLineEdit.Password)
         self.buttonLogin.clicked.connect(self.handleLogin)
 
     def handleLogin(self):
+
         if self.textName.text() == 'k' and self.textPass.text() == 'k':
             self.accept()
+            Login.username = 'Kariem    '
+            print (self.username)
         elif self.textName.text() == 'enjy' and self.textPass.text() == 'enjy':
             self.accept()
         elif self.textName.text() == 'sherok' and self.textPass.text() == 'sherok':
@@ -66,7 +70,7 @@ class MainApp(QMainWindow):
         self.btn_send.clicked.connect(self.send)
         self.comboBox_4.currentIndexChanged.connect(self.test)
         self.btn_refuse.clicked.connect(self.refuse)
-        self.load()
+        #self.load()
 
     def autoload(self):
         timer = QtCore.QTimer()
@@ -127,8 +131,8 @@ class MainApp(QMainWindow):
                                       'Database=TasksDB;'
                                       'uid=sa;pwd=deveit')
         cursor = connection.cursor()
-        query = ("SELECT [To] , [Desc] , Priority , Status , ID , time FROM Tasks WHERE [To] = ? ORDER BY time DESC")
-        values = ['Kariem    ']
+        query = ("SELECT [from] , [To] , [Desc] , Priority , Status , ID , time FROM Tasks WHERE [To] = ? ORDER BY time DESC")
+        values = [Login.username]
         cursor.execute(query, values)
         results = cursor.fetchall()
         self.tableWidget.setRowCount(0)
@@ -147,7 +151,7 @@ class MainApp(QMainWindow):
             connection.close()
 
         for i in range(self.tableWidget.rowCount()):
-            item = self.tableWidget.item(i, 3)
+            item = self.tableWidget.item(i, 4)
             i_d = item.text()
             if i_d == 'Accepted':
                 self.setColortoRow(self.tableWidget, i,0, 102, 0 )
@@ -174,7 +178,7 @@ class MainApp(QMainWindow):
         try:
             for currentQTableWidgetItem in self.tableWidget.selectedItems():
                 cur = currentQTableWidgetItem.row()
-                item = self.tableWidget.item(cur, 4)
+                item = self.tableWidget.item(cur, 5)
                 i_d = item.text()
                 connection = pypyodbc.connect('Driver={SQL Server};'
                                               'Server=100.0.0.2;'
@@ -213,7 +217,7 @@ class MainApp(QMainWindow):
             connection.commit()
             connection.close()
 
-            item = self.tableWidget_3.item(0, 3)
+            item = self.tableWidget_3.item(0, 4)
             i_d2 = item.text()
             #print(i_d)
             if i_d2 == 'Accepted':
@@ -270,7 +274,7 @@ class MainApp(QMainWindow):
                                           'uid=sa;pwd=deveit')
             cursor = connection.cursor()
             sqlcommand = "INSERT INTO chat VALUES (?,?,?,?,?) "
-            values = ['karim', self.textEdit.toPlainText(), self.comboBox_4.currentText(), i_d, strf]
+            values = [Login.username, self.textEdit.toPlainText(), self.comboBox_4.currentText(), i_d, strf]
             cursor.execute(sqlcommand, values)
             connection.commit()
             connection.close()
@@ -291,7 +295,7 @@ class MainApp(QMainWindow):
     def refuse(self):
         for currentQTableWidgetItem in self.tableWidget.selectedItems():
             cur = currentQTableWidgetItem.row()
-            item = self.tableWidget.item(cur ,4)
+            item = self.tableWidget.item(cur ,5)
             i_d = item.text()
             connection = pypyodbc.connect('Driver={SQL Server};'
                                           'Server=100.0.0.2;'
@@ -312,7 +316,7 @@ class MainApp(QMainWindow):
         try:
             for currentQTableWidgetItem in self.tableWidget.selectedItems():
                 cur = currentQTableWidgetItem.row()
-                item = self.tableWidget.item(cur ,4)
+                item = self.tableWidget.item(cur ,5)
                 i_d = item.text()
                 connection = pypyodbc.connect('Driver={SQL Server};'
                                               'Server=100.0.0.2;'
@@ -329,9 +333,6 @@ class MainApp(QMainWindow):
             QMessageBox.information(self,'select one Item', 'select one item')
 
     def update_prog(self, progress, i_d):
-        #item2 = self.tableWidget_3.item(0, 4)
-        #i_d = item2.text()
-        #progress = self.progressBar.value()
         connection = pypyodbc.connect('Driver={SQL Server};'
                                       'Server=100.0.0.2;'
                                       'Database=TasksDB;'
@@ -358,8 +359,8 @@ class MainApp(QMainWindow):
                                           'Database=TasksDB;'
                                           'uid=sa;pwd=deveit')
             cursor = connection.cursor()
-            sqlcommand = "INSERT INTO Tasks VALUES (?,?,?,?,?,?)"
-            values = [self.comboBox.currentText(), self.lineEdit.toPlainText(), self.comboBox_2.currentText(), 'Waiting accept', 0, strf]
+            sqlcommand = "INSERT INTO Tasks VALUES (?,?,?,?,?,?,?)"
+            values = [Login.username, self.comboBox.currentText(), self.lineEdit.toPlainText(), self.comboBox_2.currentText(), 'Waiting accept', 0, strf]
             cursor.execute(sqlcommand, values)
             connection.commit()
             connection.close()
